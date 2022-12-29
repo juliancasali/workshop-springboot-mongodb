@@ -1,6 +1,7 @@
 package com.example.springbootmongodb.resources;
 
 import com.example.springbootmongodb.domain.User;
+import com.example.springbootmongodb.dto.UserDTO;
 import com.example.springbootmongodb.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class UserResource {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>>findAll(){
         List<User> list = service.findAll();
+        List<UserDTO> userDTO = list.stream().map(x -> new UserDTO(x)).toList();
         return ResponseEntity.ok(list);
     }
 }
