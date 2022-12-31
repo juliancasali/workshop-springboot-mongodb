@@ -20,9 +20,15 @@ public class UserResource {
     private UserService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>>findAll(){
+    public ResponseEntity<List<UserDTO>>findAll(){
         List<User> list = service.findAll();
         List<UserDTO> userDTO = list.stream().map(x -> new UserDTO(x)).toList();
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @RequestMapping(value = {"/id"}, method = RequestMethod.GET)
+    public ResponseEntity<UserDTO> findById(String id){
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(new UserDTO(obj));
     }
 }
