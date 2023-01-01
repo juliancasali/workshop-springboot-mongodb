@@ -22,11 +22,11 @@ public class UserResource {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<UserDTO>> findAll() {
         List<User> list = service.findAll();
-        List<UserDTO> userDTO = list.stream().map(x -> new UserDTO(x)).toList();
-        return ResponseEntity.ok(userDTO);
+        List<UserDTO> listDTO = list.stream().map(UserDTO::new).toList();
+        return ResponseEntity.ok(listDTO);
     }
 
-    @RequestMapping(value = {"/id"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{/id}"}, method = RequestMethod.GET)
     public ResponseEntity<UserDTO> findById(String id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(new UserDTO(obj));
@@ -36,7 +36,7 @@ public class UserResource {
     public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO) {
         User obj = service.froDTO(objDTO);
         obj = service.insert(obj);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUriString());
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
